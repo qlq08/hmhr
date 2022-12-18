@@ -19,7 +19,7 @@
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
+          ref="mobile"
           v-model="loginForm.mobile"
           placeholder="Mobile"
           name="mobile"
@@ -57,7 +57,7 @@
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
-        >Login</el-button
+        >登录</el-button
       >
 
       <div class="tips">
@@ -65,12 +65,14 @@
         <span> 密码: 123456</span>
       </div>
     </el-form>
+    <el-button @click="testFn">测试</el-button>
   </div>
 </template>
 
 <script>
 import { validMobile } from '@/utils/validate'
-import { loginAPI } from '@/api'
+import { getUserProfileAPI } from '@/api'
+import { mapActions } from 'vuex'
 export default {
   name: 'Login',
   data () {
@@ -109,6 +111,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('user', ['loginActions']),
     showPwd () {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -121,15 +124,36 @@ export default {
     },
     handleLogin () {
       this.$refs.loginForm.validate(async (valid) => { // 登录校验
+        // 登录校验
         if (valid) {
           this.loading = true
-          const res = await loginAPI(this.loginForm)
-          console.log(res)
+          try {
+            // const res = await loginAPI(this.loginForm)
+            const res = await this.loginActions(this.loginForm)
+            this.$message.success(res.message)
+            // this.$store.commit('user/SET_TOKEN', res.data)
+            console.log(res)
+          } catch (err) {
+            // this.$message.error(err.message)
+            console.error(err)
+          }
           this.loading = false
         } else {
           return false // 未通过
         }
+        // 知识点1:
+        // this.loginForm是上面定义和v-model绑定的对象以及对象key属性
+        // 这里直接把相同的参数名对象直接发给后台 (建议: 前端定义变量可以直接跟接口文档要求的参数名一致)
+        // 知识点2: await只能拿到成功的结果, 如果Promise对象内用reject()返回, 这里就中断不往下执行
+        // 知识点3: 当Promise对象这里, 没有自己捕获到错误(try+catch, 或者.catch())然后处理的话, 浏览器就会把"抛出的这个错误"打印到控制台里, "终止代码继续往下"
+        // 知识点4: 捕获Promise的错误 try+catch
+        // 知识点5: 打印相关
+        // 小点: .log(普通打印) .error(红色打印) .dir(打印对象详细信息-可以展开看里面key+value)
       })
+    },
+    async testFn () {
+      const res = await getUserProfileAPI()
+      console.log(res)
     }
   }
 }

@@ -18,3 +18,15 @@ export function getInfo (token) {
 
 export function logout () {
 }
+/**
+ * 用户 - 获取用户资料
+ * @description: 获取用户资料
+ * @param {*}
+ * @return {*}
+ */
+export function getUserProfileAPI () {
+  return request({
+    url: '/sys/profile',
+    method: 'post'
+  })
+}
