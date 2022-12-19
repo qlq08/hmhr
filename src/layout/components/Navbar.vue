@@ -15,7 +15,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="staffPhoto" class="user-avatar" />
+          <img v-imagerror="defaultImg" :src="staffPhoto" class="user-avatar" />
           <span class="name">{{ name }}</span>
           <i class="el-icon-caret-bottom" style="color: #fff" />
         </div>
@@ -36,12 +36,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, createNamespacedHelpers } from 'vuex'
 import Hamburger from '@/components/Hamburger'
-
+const { mapActions } = createNamespacedHelpers('users')
 export default {
   components: {
     Hamburger
+  },
+  data () {
+    return {
+      defaultImg: require('@/./assets/common/head.jpg')
+    }
   },
   computed: {
     ...mapGetters([
@@ -51,6 +56,7 @@ export default {
     ])
   },
   methods: {
+    ...mapActions('logout'),
     toggleSideBar () {
       this.$store.dispatch('app/toggleSideBar')
     },
