@@ -38,7 +38,7 @@
 <script>
 import { mapGetters, createNamespacedHelpers } from 'vuex'
 import Hamburger from '@/components/Hamburger'
-const { mapActions } = createNamespacedHelpers('users')
+const { mapActions } = createNamespacedHelpers('user')
 export default {
   components: {
     Hamburger

@@ -1,6 +1,6 @@
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { login, getUserInfo, getUserDetailById } from '@/api'
-
+import { setTimeStamp } from './user'
 // 状态
 const state = {
   token: getToken(), // 设置token为共享状态 初始化vuex的时候 就先从缓存中读取
@@ -34,6 +34,8 @@ const actions = {
     // 调用api接口
     const result = await login(data) // 拿到token
     context.commit('setToken', result) // 设置token
+    // 写入时间戳
+    setTimeStamp() // 将当前的最新时间写入缓存
   },
   // 获取用户资料action
   async getUserInfo (context) {
