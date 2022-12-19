@@ -19,14 +19,14 @@ export function getInfo (token) {
 export function logout () {
 }
 /**
- * 用户 - 获取用户资料
+ * 获取用户的基本资料
  * @description: 获取用户资料
  * @param {*}
  * @return {*}
  */
-/* export function getUserProfileAPI () {
+export function getUserInfo () {
   return request({
     url: '/sys/profile',
     method: 'post'
   })
-} */
+}
