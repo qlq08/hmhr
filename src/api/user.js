@@ -24,9 +24,9 @@ export function logout () {
  * @param {*}
  * @return {*}
  */
-export function getUserProfileAPI () {
+/* export function getUserProfileAPI () {
   return request({
     url: '/sys/profile',
     method: 'post'
   })
-}
+} */
