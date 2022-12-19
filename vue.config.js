@@ -8,7 +8,7 @@ function resolve (dir) {
 
 const name = defaultSettings.title || 'vue Admin Template' // page title
 
-const port = process.env.port || process.env.npm_config_port || 8888 // dev port
+const port = process.env.port || process.env.npm_config_port || 9528// dev port
 module.exports = {
   publicPath: '/',
   outputDir: 'dist',
@@ -22,7 +22,7 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    // 代理配置
+    // 反向代理配置
     proxy: {
       // 当我们的本地的请求 有/api的时候，就会代理我们的请求地址向另外一个服务器发出请求
       '/api': {

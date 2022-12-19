@@ -1,42 +1,31 @@
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { loginAPI } from '@/api'
+import { login } from '@/api'
 const getDefaultState = () => {
   return {
-    token: getToken() // 用户token, 默认为''
+    token: getToken() // 设置token为共享状态 初始化vuex的时候 就先从缓存中读取
   }
 }
 // 状态
 const state = getDefaultState()
 // 修改状态
 const mutations = {
-  RESET_STATE: (state) => {
-    Object.assign(state, getDefaultState())
-  },
   // 设置token
-  SET_TOKEN (state, newToken) {
-    state.token = newToken
-    setToken(newToken)
+  setToken (state, token) {
+    state.token = token // 将数据设置给vuex
+    setToken(token) // vuex和缓存数据的同步
   },
   // 删除token
-  REMOVE_TOKEN (state) {
-    state.token = ''
-    removeToken()
+  removeToken (state) {
+    state.token = null // 将vuex的数据置空
+    removeToken() // 同步到缓存
   }
 }
 // 执行异步
 const actions = {
-  // 登录逻辑-封装
-  async loginActions ({ commit }, value) {
-    try {
-      const res = await loginAPI(value)
-      // 我们只需要token,保存到上面的vuex中
-      commit('SET_TOKEN', res.data)
-      // 逻辑页面还在接收数组, 外面写成功/失败的逻辑, 所以这里要把数组返回出去
-      // return到actions调用的地方(login/index.vue)
-      return res
-    } catch (error) {
-      return Promise.reject(error)
-    }
+  async login (context, data) {
+    // 调用api接口
+    const result = await login(data) // 拿到token
+    context.commit('setToken', result) // 设置token
   }
 }
 export default {

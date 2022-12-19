@@ -21,7 +21,7 @@
         <el-input
           ref="mobile"
           v-model="loginForm.mobile"
-          placeholder="Mobile"
+          placeholder="请输入手机号"
           name="mobile"
           type="text"
           tabindex="1"
@@ -38,7 +38,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="请输入密码"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -76,14 +76,18 @@ import { mapActions } from 'vuex'
 export default {
   name: 'Login',
   data () {
-    const validateMobile = (rule, value, callback) => {
+    /*  const validateMobile = (rule, value, callback) => {
       if (!validMobile(value)) {
         callback(new Error('请输入正确的手机号'))
       } else {
         callback()
       }
-    }
+    } */
 
+    // 自定义校验函数
+    const validateMobile = (rule, value, callback) => {
+      validMobile(value) ? callback() : callback(new Error('请输入正确的手机号'))
+    }
     return {
       loginForm: {
         mobile: '13800000002',
@@ -210,6 +214,7 @@ $cursor: #68b0fe; // 将输入框光标改成蓝色
   }
   .el-form-item__error {
     font-size: 14px;
+    color: #fff;
   }
 }
 </style>

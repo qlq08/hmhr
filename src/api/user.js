@@ -5,7 +5,7 @@ import request from '@/utils/request'
  * @param {*} param0
  * @returns
  */
-export function loginAPI (data) {
+export function login (data) {
   return request({
     url: '/sys/login',
     methods: 'post',
