@@ -5,28 +5,37 @@ import request from '@/utils/request'
  * @param {*} param0
  * @returns
  */
-export function login (data) {
+
+export const login = (data) => {
   return request({
     url: '/sys/login',
-    methods: 'post',
+    method: 'post',
     data
   })
 }
+export const getInfo = (token) => { }
 
-export function getInfo (token) {
-}
+export const logout = () => { }
 
-export function logout () {
-}
 /**
  * 获取用户的基本资料
  * @description: 获取用户资料
  * @param {*}
  * @return {*}
  */
-export function getUserInfo () {
+
+export const getUserInfo = () => {
   return request({
     url: '/sys/profile',
     method: 'post'
+  })
+}
+/** *
+ * 获取用户的基本信息 现在写它 完全是为了显示头像
+ *
+ * ***/
+export const getUserDetailById = (id) => {
+  return request({
+    url: `/sys/user/${id}`
   })
 }

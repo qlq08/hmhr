@@ -18,6 +18,11 @@ router.beforeEach(async (to, from, next) => {
       NProgress.done() // 手动强制关闭一次  为了解决 手动切换地址时 进度条的不关闭的问题
     } else {
       next() // 直接放行
+      if (!store.getters.userId) {
+        // 如果没有id这个值 才会调用 vuex的获取资料的action
+        await store.dispatch('user/getUserInfo')
+        // 为什么要写await 因为我们想获取完资料再去放行
+      }
     }
   } else {
     // 如果没有token
