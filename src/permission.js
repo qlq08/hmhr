@@ -1,6 +1,7 @@
 // 权限拦截 导航守卫 路由守卫 router
 import router from '@/router' // 引入路由实例
 import store from '@/store' // 引入vuex store实例
+import getPageTitle from '@/utils/get-page-title'
 import NProgress from 'nprogress' // 引入一份进度条插件
 import 'nprogress/nprogress.css'
 const whiteList = ['/login', '/404'] // 定义白名单 所有不受权限控制的页面
@@ -37,6 +38,8 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
-router.afterEach(() => {
+// 后置路由守卫
+router.afterEach((to, from) => {
+  document.title = getPageTitle(to.meta.title)
   NProgress.done() // 关闭进度条
 })
