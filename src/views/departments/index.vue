@@ -5,12 +5,12 @@
       <el-card class="tree-card">
         <!-- 用了一个行列布局 -->
         <!-- 缺少treeNode -->
-        <treeToos :tree-node="company" :is-root="true" />
+        <treeTools :tree-node="company" :is-root="true" />
         <el-tree :data="departs" :props="defaultProps" default-expand-all>
           <!-- 说明el-tree里面的这个内容 就是插槽内容 => 填坑内容  => 有多少个节点循环多少次 -->
           <!-- scope-scope 是 tree组件传给每个节点的插槽的内容的数据 -->
           <!-- 顺序一定是 执行slot-scope的赋值 才去执行 props的传值 -->
-          <treeToos
+          <treeTools
             slot-scope="obj"
             :tree-node="obj.data"
             @delDepts="getDepartments"
@@ -18,20 +18,20 @@
           />
         </el-tree>
       </el-card>
-      <AddDept :show-dialog="showDialog" />
+      <AddDept :show-dialog="showDialog" :tree-node="node" />
     </div>
   </div>
 </template>
 
 <script>
-import treeToos from './components/tree-tools'
+import treeTools from './components/tree-tools'
 import { getDepartments } from '@/api/departments'
 import { tranListToTreeData } from '@/utils'
 import AddDept from './components/add-dept' // 引入新增部门组件
 export default {
   name: 'Departments',
   components: {
-    treeToos,
+    treeTools,
     AddDept
   },
   data () {
@@ -41,6 +41,7 @@ export default {
       defaultProps: {
         label: 'name' // 表示 从这个属性显示内容
       },
+      node: null,
       showDialog: false // 显示窗体
     }
   },
@@ -50,7 +51,7 @@ export default {
   methods: {
     async getDepartments () {
       const result = await getDepartments()
-      this.company = { name: result.companyName, manager: '负责人' }
+      this.company = { name: result.companyName, manager: '负责人', id: '' }
       // this.departs = result.depts // 需要将其转化成树形结构
       // 这里定义一个空串  因为 它是根 所有的子节点的数据pid 都是 ""
       this.departs = tranListToTreeData(result.depts, '')
