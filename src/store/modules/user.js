@@ -1,6 +1,6 @@
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { login, getUserInfo, getUserDetailById } from '@/api'
-import { setTimeStamp } from './user'
+import { setTimeStamp } from '@/utils/auth'
 // 状态
 const state = {
   token: getToken(), // 设置token为共享状态 初始化vuex的时候 就先从缓存中读取

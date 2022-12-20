@@ -57,7 +57,7 @@ service.interceptors.response.use(
 // 超时逻辑  (当前时间  - 缓存中的时间) 是否大于 时间差
 const IsCheckTimeOut = () => {
   const currentTime = Date.now() // 当前时间戳
-  const timestamp = getTimeStamp() // 缓存时间戳
-  return (currentTime - timestamp) / 1000 > Timeout
+  const timeStamp = getTimeStamp() // 缓存时间戳
+  return (currentTime - timeStamp) / 1000 > Timeout
 }
 export default service

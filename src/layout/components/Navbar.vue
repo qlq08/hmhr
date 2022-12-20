@@ -38,7 +38,7 @@
 <script>
 import { mapGetters, createNamespacedHelpers } from 'vuex'
 import Hamburger from '@/components/Hamburger'
-const { mapActions } = createNamespacedHelpers('user')
+const { mapActions } = createNamespacedHelpers('user') // 这是mapAction直接对应模块下的action辅助函数
 export default {
   components: {
     Hamburger
