@@ -1,10 +1,8 @@
-// 导出属于员工的路由规则
+// 导出属于员工管理的路由规则
 import Layout from '@/layout'
-// {path:'',component:''}
-// 每个子模块 其实 都是外层是layout 组件位于layout的二级路由里面
 export default {
   path: '/employees', // 路径
-  name: 'employees', // 给路由规则加一个name
+  // name: 'employees', // 给路由规则加一个name
   component: Layout, // 组件
   // 配置二级路由表
   children: [{
@@ -12,8 +10,8 @@ export default {
     component: () => import('@/views/employees'),
     // 路由元信息 其实就是存储数据的对象 我们可以在这里放置一些信息
     meta: {
-      title: '组织架构', // meta属性的里面的属性 随意定义  但是这里为什么用title呢,因为左侧导航会读取我们的路由里的meta里面的title作为显示菜单名称
-      icon: 'tree'
+      title: '员工管理',
+      icon: 'people'
     }
   }]
 }

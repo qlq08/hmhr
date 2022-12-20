@@ -4,13 +4,25 @@ Vue.use(Router)
 
 import Layout from '@/layout'
 // 引入多个模块的规则
-
+import approvalsRouter from './modules/approvals'
+import departmentsRouter from './modules/departments'
 import employeesRouter from './modules/employees'
+import permissionRouter from './modules/permission'
+import attendancesRouter from './modules/attendances'
+import salarysRouter from './modules/salarys'
+import settingRouter from './modules/setting'
+import socialRouter from './modules/social'
 
 // 动态路由
 export const asyncRoutes = [
-  employeesRouter
-
+  approvalsRouter,
+  departmentsRouter,
+  employeesRouter,
+  permissionRouter,
+  attendancesRouter,
+  salarysRouter,
+  settingRouter,
+  socialRouter
 ]
 
 export const constantRoutes = [
@@ -32,7 +44,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
 
