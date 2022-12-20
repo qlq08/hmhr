@@ -29,3 +29,11 @@ export const addDepartments = (data) => {
     data
   })
 }
+/** *
+ * 获取部门详情
+ * ***/
+export const getDepartDetail = (id) => {
+  return request({
+    url: `/company/department/${id}`
+  })
+}
