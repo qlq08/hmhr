@@ -1,20 +1,38 @@
 <template>
   <!-- 新增部门的弹层 -->
-  <el-dialog title="新增部门" :visible="showDialog">
+  <el-dialog title="新增部门" :visible="showDialog" @close="btnCancel">
     <!-- 表单组件  el-form   label-width设置label的宽度   -->
     <!-- 匿名插槽 -->
-    <el-form label-width="120px">
-      <el-form-item label="部门名称">
-        <el-input style="width: 80%" placeholder="1-50个字符" />
-      </el-form-item>
-      <el-form-item label="部门编码">
-        <el-input style="width: 80%" placeholder="1-50个字符" />
-      </el-form-item>
-      <el-form-item label="部门负责人">
-        <el-select style="width: 80%" placeholder="请选择" />
-      </el-form-item>
-      <el-form-item label="部门介绍">
+    <el-form
+      ref="deptForm"
+      :model="formData"
+      :rules="rules"
+      label-width="120px"
+    >
+      <el-form-item label="部门名称" prop="name">
         <el-input
+          v-model="formData.name"
+          style="width: 80%"
+          placeholder="1-50个字符"
+        />
+      </el-form-item>
+      <el-form-item label="部门编码" prop="code">
+        <el-input
+          v-model="formData.code"
+          style="width: 80%"
+          placeholder="1-50个字符"
+        />
+      </el-form-item>
+      <el-form-item label="部门负责人" prop="manager">
+        <el-select
+          v-model="formData.manager"
+          style="width: 80%"
+          placeholder="请选择"
+        />
+      </el-form-item>
+      <el-form-item label="部门介绍" prop="introduce">
+        <el-input
+          v-model="formData.introduce"
           style="width: 80%"
           placeholder="1-300个字符"
           type="textarea"
@@ -26,14 +44,14 @@
     <el-row slot="footer" type="flex" justify="center">
       <!-- 列被分为24 -->
       <el-col :span="6">
-        <el-button type="primary" size="small">确定</el-button>
+        <el-button type="primary" size="small" @click="btnOK">确定</el-button>
         <el-button size="small">取消</el-button>
       </el-col>
     </el-row>
   </el-dialog>
 </template>
 <script>
-import { getDepartments } from '@/api/departments'
+import { getDepartments, addDepartments } from '@/api/departments'
 // import { getDepartments } from '@/api/departments'
 export default {
   props: {
@@ -91,6 +109,25 @@ export default {
           { trigger: 'blur', min: 1, max: 300, message: '部门介绍要求1-50个字符' }
         ]
       }
+    }
+  },
+  methods: {
+    // 点击确定时触发
+    btnOK () {
+      this.$refs.deptForm.validate(async isOK => {
+        if (isOK) {
+          // 表示可以提交了
+          await addDepartments({ ...this.formData, pid: this.treeNode.id }) // 调用新增接口 添加父部门的id
+          this.$emit('addDepts') // 告诉父组件 新增数据成功 重新拉取数据
+          // Vue2.x 的语法  update:props名称
+          this.$emit('update:showDialog', false)
+        }
+      })
+    },
+    // 取消和重置数据和校验
+    btnCancel () {
+      this.$refs.deptForm.resetFields() // 重置校验字段
+      this.$emit('update:showDialog', false) // 关闭
     }
   }
 }
