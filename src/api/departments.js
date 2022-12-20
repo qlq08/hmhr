@@ -37,3 +37,14 @@ export const getDepartDetail = (id) => {
     url: `/company/department/${id}`
   })
 }
+/**
+ * 编辑部门
+ *
+ * ***/
+export const updateDepartments = (data) => {
+  return request({
+    url: `/company/department/${data.id}`,
+    method: 'put',
+    data
+  })
+}

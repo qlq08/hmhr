@@ -71,7 +71,7 @@ export default {
           // 如果删除成功了 就会进入这里
           this.$emit('delDepts') // 触发自定义事件
           this.$message.success('删除部门成功')
-        })
+        }).catch(() => { })
       }
     }
   }
