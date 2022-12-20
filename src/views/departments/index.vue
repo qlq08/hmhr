@@ -14,9 +14,11 @@
             slot-scope="obj"
             :tree-node="obj.data"
             @delDepts="getDepartments"
+            @addDepts="addDepts"
           />
         </el-tree>
       </el-card>
+      <AddDept :show-dialog="showDialog" />
     </div>
   </div>
 </template>
@@ -25,10 +27,12 @@
 import treeToos from './components/tree-tools'
 import { getDepartments } from '@/api/departments'
 import { tranListToTreeData } from '@/utils'
+import AddDept from './components/add-dept' // 引入新增部门组件
 export default {
   name: 'Departments',
   components: {
-    treeToos
+    treeToos,
+    AddDept
   },
   data () {
     return {
@@ -36,7 +40,8 @@ export default {
       departs: [],
       defaultProps: {
         label: 'name' // 表示 从这个属性显示内容
-      }
+      },
+      showDialog: false // 显示窗体
     }
   },
   created () {
@@ -50,6 +55,11 @@ export default {
       // 这里定义一个空串  因为 它是根 所有的子节点的数据pid 都是 ""
       this.departs = tranListToTreeData(result.depts, '')
       console.log(result)
+    },
+    addDepts (node) {
+      this.showDialog = true // 显示弹层
+      // 因为node是当前的点击的部门 ，此时这个部门应该记录下拉
+      this.node = node
     }
   }
 }

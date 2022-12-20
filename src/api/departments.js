@@ -17,3 +17,15 @@ export const delDepartments = (id) => {
     method: 'delete'
   })
 }
+/**
+ *  新增部门接口
+ *
+ * ****/
+
+export const addDepartments = (data) => {
+  return request({
+    url: '/company/department',
+    method: 'post',
+    data
+  })
+}
