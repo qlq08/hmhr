@@ -27,9 +27,16 @@
               />
               <el-table-column align="center" prop="description" label="描述" />
               <el-table-column label="操作" align="center">
-                <el-button size="small" type="success">分配权限</el-button>
-                <el-button size="small" type="primary">编辑</el-button>
-                <el-button size="small" type="danger">删除</el-button>
+                <template #default="{ row }">
+                  <el-button size="small" type="success">分配权限</el-button>
+                  <el-button size="small" type="primary">编辑</el-button>
+                  <el-button
+                    size="small"
+                    type="danger"
+                    @click="deleteRole(row.id)"
+                    >删除</el-button
+                  >
+                </template>
               </el-table-column>
             </el-table>
             <!-- 分页组件 -->
@@ -86,7 +93,7 @@
   </div>
 </template>
 <script>
-import { getRoleList, getCompanyInfo } from '@/api'
+import { getRoleList, getCompanyInfo, deleteRole } from '@/api'
 import { mapGetters } from 'vuex'
 export default {
   data () {
@@ -122,8 +129,19 @@ export default {
     // 获取的公司的信息
     async getCompanyInfo () {
       this.formData = await getCompanyInfo(this.companyId)
+    },
+    async deleteRole (id) {
+      // 提示
+      try {
+        await this.$confirm('确认删除该角色吗')
+        // 只有点击了确定 才能进入到下方
+        await deleteRole(id) // 调用删除接口
+        this.getRoleList() // 重新加载数据
+        this.$message.success('删除角色成功')
+      } catch (error) {
+        console.log(error)
+      }
     }
-
   }
 }
 </script>
