@@ -8,9 +8,9 @@
             <!-- 新增角色按钮 -->
             <el-row style="height: 60px">
               <el-button
+                type="primary"
                 icon="el-icon-plus"
                 size="small"
-                type="primary"
                 @click="showDialog = true"
                 >新增角色</el-button
               >
@@ -31,8 +31,13 @@
               />
               <el-table-column align="center" prop="description" label="描述" />
               <el-table-column label="操作" align="center">
-                <template #default="{ row }">
-                  <el-button size="small" type="success">分配权限</el-button>
+                <template slot-scope="{ row }">
+                  <el-button
+                    size="small"
+                    type="success"
+                    @click="assignPermission(row.id)"
+                    >分配权限</el-button
+                  >
                   <el-button
                     size="small"
                     type="primary"
@@ -130,12 +135,33 @@
         </el-col>
       </el-row>
     </el-dialog>
+    <el-dialog title="分配权限" :visible.sync="showPermissionDialog">
+      <el-tree
+        ref="permTree"
+        node-key="id"
+        check-strictly
+        :data="permData"
+        :default-checked-keys="permIds"
+        :props="{ label: 'name' }"
+        default-expand-all
+        show-checkbox
+      />
+      <el-row slot="footer" type="flex" justify="center">
+        <el-col :span="6">
+          <el-button size="small" @click="btnPermCancel">取消</el-button>
+          <el-button size="small" type="primary" @click="btnPermOK"
+            >确定</el-button
+          >
+        </el-col>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { getRoleList, getCompanyInfo, deleteRole, updateRole, getRoleDetail, addRole } from '@/api'
+import { getRoleList, getCompanyInfo, deleteRole, updateRole, getRoleDetail, addRole, assignPerm } from '@/api'
 import { mapGetters } from 'vuex'
-
+import { tranListToTreeData } from '@/utils'
+import { getPermissionList } from '@/api/permission'
 export default {
   data () {
     return {
@@ -152,7 +178,11 @@ export default {
       roleForm: {},
       rules: {
         name: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }]
-      }
+      },
+      roleId: null,
+      showPermissionDialog: false,
+      permData: [], // 权限数据
+      permIds: []
     }
   },
   computed: {
@@ -220,6 +250,23 @@ export default {
       // 移除校验
       this.$refs.roleForm.resetFields()
       this.showDialog = false
+    },
+    // 分配权限
+    async assignPermisson (id) {
+      this.roleId = id // 系统管理员ID
+      this.permData = tranListToTreeData(await getPermissionList(), '0')
+      const { permIds } = await getRoleDetail(id)
+      this.permIds = permIds
+      this.showPermissionDialog = true
+    },
+    async btnPermOK () {
+      await assignPerm({ id: this.roleId, permIds: this.$refs.permTree.getCheckedKeys() })
+      this.$message.success('分配权限成功')
+      this.btnPermCancel()
+    },
+    btnPermCancel () {
+      this.permIds = []
+      this.showPermissionDialog = false
     }
   }
 }
