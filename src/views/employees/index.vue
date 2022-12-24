@@ -18,11 +18,25 @@
           <el-table-column
             label="聘用形式"
             sortable=""
-            prop="formOfEmployment"
+            :formatter="formatEmployment"
           />
           <el-table-column label="部门" sortable="" prop="departmentName" />
-          <el-table-column label="入职时间" sortable="" prop="timeOfEntry" />
-          <el-table-column label="账户状态" sortable="" prop="enableState" />
+          <el-table-column label="入职时间" sortable="" prop="timeOfEntry">
+            <template slot-scope="{ row }">
+              {{ row.timeOfEntry | formatDate }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="账户状态"
+            align="center"
+            sortable=""
+            prop="enableState"
+          >
+            <template slot-scope="{ row }">
+              <!-- 根据当前状态来确定 是否打开开关 -->
+              <el-switch :value="row.enableState === 1" />
+            </template>
+          </el-table-column>
           <el-table-column label="操作" sortable="" fixed="right" width="280">
             <template>
               <el-button type="text" size="small">查看</el-button>
@@ -56,6 +70,7 @@
 
 <script>
 import { getEmployeeList } from '@/api/employees'
+import EmployeeEnum from '@/api/constant/employees'
 export default {
   data () {
     return {
@@ -83,6 +98,10 @@ export default {
       this.page.total = total
       this.list = rows
       this.loading = false
+    },
+    formatEmployment (row, column, cellValue, index) {
+      const obj = EmployeeEnum.hireType.find(item => item.id === cellValue)
+      return obj ? obj.value : '未知'
     }
   }
 }
