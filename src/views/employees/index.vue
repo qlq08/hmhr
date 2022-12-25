@@ -6,7 +6,14 @@
         <template slot="after">
           <el-button size="small" type="warning">导入</el-button>
           <el-button size="small" type="danger">导出</el-button>
-          <el-button size="small" type="primary">新增员工</el-button>
+          <addEmployee :show-dialog.sync="showDialog" />
+          <el-button
+            icon="plus"
+            size="small"
+            type="primary"
+            @click="showDialog = true"
+            >新增员工</el-button
+          >
         </template>
       </page-tools>
       <!-- 放置表格和分页 -->
@@ -76,7 +83,11 @@
 <script>
 import { getEmployeeList, delEmployee } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees'
+import addEmployee from './components/add-employee.vue'
 export default {
+  components: {
+    addEmployee
+  },
   data () {
     return {
       loading: false,
@@ -85,7 +96,8 @@ export default {
         page: 1, // 当前页码
         size: 10,
         total: 0 // 总数
-      }
+      },
+      showDialog: false
 
     }
   },
@@ -109,7 +121,7 @@ export default {
       return obj ? obj.value : '未知'
     },
     // 删除员工
-    async delEmployee (id) {
+    async deleteEmployee (id) {
       try {
         await this.$confirm('您确定删除该员工吗')
         await delEmployee(id)

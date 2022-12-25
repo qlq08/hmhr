@@ -30,7 +30,7 @@ export const delEmployee = (id) => {
 /** **
  *  新增员工的接口
  * **/
-export function addEmployee (data) {
+export const addEmployee = (data) => {
   return request({
     method: 'post',
     url: '/sys/user',
